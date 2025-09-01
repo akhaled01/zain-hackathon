@@ -28,11 +28,9 @@ const ChallengeNode = ({
     challenge: Challenge;
     onChallengeClick: (challenge: Challenge) => void;
     isUserTeamChallenge?: boolean;
-    hasTeamChallenge?: boolean;
   };
 }) => {
-  const { challenge, onChallengeClick, isUserTeamChallenge, hasTeamChallenge } =
-    data;
+  const { challenge, onChallengeClick, isUserTeamChallenge } = data;
   const IconComponent = challenge.icon;
 
   // Alternate between two different floating animations for variety
@@ -57,19 +55,8 @@ const ChallengeNode = ({
       {/* Glowing background effect */}
       <div
         className={`absolute inset-0 w-32 h-32 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse ${
-          isUserTeamChallenge
-            ? "bg-primary/30"
-            : hasTeamChallenge
-            ? "bg-white/10"
-            : "bg-white/20"
+          isUserTeamChallenge ? "bg-primary/30" : "bg-white/20"
         }`}
-        style={
-          isUserTeamChallenge
-            ? {}
-            : hasTeamChallenge
-            ? { backgroundColor: "#1e293b" }
-            : { backgroundColor: "#334155" }
-        }
       />
 
       {/* Main circular container */}
@@ -77,40 +64,19 @@ const ChallengeNode = ({
         className={`relative w-32 h-32 rounded-full bg-background/80 backdrop-blur-sm border-2 transition-all duration-300 flex flex-col items-center justify-center p-4 ${
           isUserTeamChallenge
             ? "border-primary/60 hover:border-primary shadow-lg shadow-primary/20"
-            : hasTeamChallenge
-            ? "border-white/30 hover:border-white/50"
             : "border-white/60 hover:border-white/80"
         }`}
-        style={
-          isUserTeamChallenge
-            ? {}
-            : hasTeamChallenge
-            ? {
-                borderColor: "#475569",
-              }
-            : {
-                borderColor: "#64748b",
-              }
-        }
       >
         {/* Challenge icon */}
         <div className="flex flex-col items-center gap-1">
           <div
             className={`p-2 rounded-full ${
-              isUserTeamChallenge
-                ? "bg-primary/20"
-                : hasTeamChallenge
-                ? "bg-white/10"
-                : "bg-white/20"
+              isUserTeamChallenge ? "bg-primary/20" : "bg-white/20"
             }`}
           >
             <IconComponent
               className={`h-6 w-6 ${
-                isUserTeamChallenge
-                  ? "text-primary"
-                  : hasTeamChallenge
-                  ? "text-white/40"
-                  : "text-white/60"
+                isUserTeamChallenge ? "text-primary" : "text-white/60"
               }`}
             />
           </div>
@@ -119,11 +85,7 @@ const ChallengeNode = ({
           <div className="text-center">
             <div
               className={`text-[10px] font-semibold ${
-                isUserTeamChallenge
-                  ? "text-primary"
-                  : hasTeamChallenge
-                  ? "text-white/40"
-                  : "text-white/60"
+                isUserTeamChallenge ? "text-primary" : "text-white/60"
               }`}
               style={{ fontFamily: '"IBM Plex Mono", monospace' }}
             >
@@ -265,7 +227,6 @@ export const ChallengesDashboard = () => {
               ...node.data,
               onChallengeClick: handleChallengeClick,
               isUserTeamChallenge: false,
-              hasTeamChallenge: false,
             },
           };
         }
@@ -286,9 +247,7 @@ export const ChallengesDashboard = () => {
               stroke: "#f8fafc",
               opacity: Math.random() > 0.5 ? 0.9 : 0.6,
               filter:
-                Math.random() > 0.7
-                  ? `drop-shadow(0 0 8px #64748b)`
-                  : "none",
+                Math.random() > 0.7 ? `drop-shadow(0 0 8px #64748b)` : "none",
             },
           };
         })
