@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-const START_AT = new Date("2025-09-18T17:55:00");
-const END_AT = new Date("2025-09-20T13:15:00");
+const START_AT = new Date("2025-09-09T15:00:00");
+const END_AT = new Date("2025-09-11T21:00:00");
 
 export const useTimer = () => {
   const [timeLeft, setTimeLeft] = useState<number>(
