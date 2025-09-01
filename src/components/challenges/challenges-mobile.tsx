@@ -7,7 +7,7 @@ import { ChallengeDetailsDialog } from "./challenge-details-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, Trophy } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 // Mobile Challenge Card Component
 const MobileChallengeCard = ({
@@ -46,12 +46,6 @@ const MobileChallengeCard = ({
               >
                 {challenge.category}
               </Badge>
-              <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-muted/60 text-muted-foreground">
-                <Users className="h-3 w-3" />
-                <span className="text-xs font-medium">
-                  {challenge.registeredTeams || 0}
-                </span>
-              </div>
             </div>
 
             <h3
