@@ -20,6 +20,15 @@
       "recommended": true,
       "suspicious": {
         "noUnknownAtRules": "off"
+      },
+      "style": {
+        "noUnusedTemplateLiteral": "off"
+      },
+      "correctness": {
+        "noUnusedVariables": "off"
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "off"
       }
     },
     "domains": {
