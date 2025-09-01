@@ -155,8 +155,8 @@ const HubNode = () => {
       {/* Main hub with logo */}
       <div className="relative bg-transparent backdrop-blur-sm rounded-full p-4 border-1 border-primary/50 w-full h-full flex items-center justify-center">
         <img
-          src="/logo.png"
-          alt="Hackathon Logo"
+          src="/zain-icon.png"
+          alt="zain Logo"
           className="w-12 h-12 object-contain"
           onError={(e) => {
             // Fallback if logo doesn't exist
