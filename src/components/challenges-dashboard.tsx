@@ -128,7 +128,7 @@ const HubNode = () => {
       />
 
       {/* Animated glow rings */}
-      <div 
+      <div
         className="absolute inset-0 w-full h-full rounded-full animate-pulse"
         style={{ backgroundColor: "#9E7AFF20" }}
       />
@@ -138,7 +138,7 @@ const HubNode = () => {
         className="relative w-full h-full rounded-full p-[3px] transition-transform duration-300 hover:scale-105"
         style={{
           background: "linear-gradient(45deg, #9E7AFF, #FE8BBB, #262626)",
-          boxShadow: "0 4px 20px #9E7AFF40"
+          boxShadow: "0 4px 20px #9E7AFF40",
         }}
       >
         {/* Main hub with logo */}
@@ -263,29 +263,6 @@ export const ChallengesDashboard = () => {
     );
   }, [handleChallengeClick, setNodes]);
 
-  // Add periodic glow effect to edges
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setEdges((eds) =>
-        eds.map((edge) => {
-          const colors = ["#9E7AFF", "#FE8BBB", "#262626"];
-          const randomColor = colors[Math.floor(Math.random() * colors.length)];
-          return {
-            ...edge,
-            style: {
-              ...edge.style,
-              stroke: randomColor,
-              opacity: Math.random() > 0.5 ? 0.8 : 0.5,
-              filter:
-                Math.random() > 0.7 ? `drop-shadow(0 0 8px ${randomColor})` : "none",
-            },
-          };
-        })
-      );
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [setEdges]);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
