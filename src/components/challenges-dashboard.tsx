@@ -33,6 +33,30 @@ const ChallengeNode = ({
   const { challenge, onChallengeClick, isUserTeamChallenge } = data;
   const IconComponent = challenge.icon;
 
+  // Cycle through theme gradient borders based on challenge ID
+  const getThemeGradient = (id: number) => {
+    const colorIndex = id % 3;
+    switch (colorIndex) {
+      case 0:
+        return {
+          borderGradient: "linear-gradient(45deg, #FE8BBB, #9E7AFF)",
+          glow: "#FE8BBB",
+        };
+      case 1:
+        return {
+          borderGradient: "linear-gradient(45deg, #9E7AFF, #262626)",
+          glow: "#9E7AFF",
+        };
+      default:
+        return {
+          borderGradient: "linear-gradient(45deg, #262626, #FE8BBB)",
+          glow: "#262626",
+        };
+    }
+  };
+
+  const gradientColors = getThemeGradient(challenge.id);
+
   // Alternate between two different floating animations for variety
   const floatClass =
     challenge.id % 2 === 0
@@ -54,42 +78,34 @@ const ChallengeNode = ({
 
       {/* Glowing background effect */}
       <div
-        className={`absolute inset-0 w-32 h-32 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse ${
-          isUserTeamChallenge ? "bg-primary/30" : "bg-white/20"
-        }`}
+        className="absolute inset-0 w-32 h-32 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"
+        style={{ backgroundColor: `${gradientColors.glow}30` }}
       />
 
-      {/* Main circular container */}
+      {/* Gradient border container */}
       <div
-        className={`relative w-32 h-32 rounded-full bg-background/80 backdrop-blur-sm border-2 transition-all duration-300 flex flex-col items-center justify-center p-4 ${
-          isUserTeamChallenge
-            ? "border-primary/60 hover:border-primary shadow-lg shadow-primary/20"
-            : "border-white/60 hover:border-white/80"
-        }`}
+        className="relative w-32 h-32 rounded-full p-[2px] transition-all duration-300 hover:scale-105"
+        style={{
+          background: gradientColors.borderGradient,
+          boxShadow: `0 4px 20px ${gradientColors.glow}40`,
+        }}
       >
-        {/* Challenge icon */}
-        <div className="flex flex-col items-center gap-1">
-          <div
-            className={`p-2 rounded-full ${
-              isUserTeamChallenge ? "bg-primary/20" : "bg-white/20"
-            }`}
-          >
-            <IconComponent
-              className={`h-6 w-6 ${
-                isUserTeamChallenge ? "text-primary" : "text-white/60"
-              }`}
-            />
-          </div>
+        {/* Main circular container with neutral background */}
+        <div className="w-full h-full rounded-full bg-background/90 backdrop-blur-sm flex flex-col items-center justify-center p-4">
+          {/* Challenge icon */}
+          <div className="flex flex-col items-center gap-1">
+            <div className="p-2 rounded-full bg-muted/20">
+              <IconComponent className="h-6 w-6 text-foreground/80" />
+            </div>
 
-          {/* Challenge label */}
-          <div className="text-center">
-            <div
-              className={`text-[10px] font-semibold ${
-                isUserTeamChallenge ? "text-primary" : "text-white/60"
-              }`}
-              style={{ fontFamily: '"IBM Plex Mono", monospace' }}
-            >
-              {challenge.category.toUpperCase()}
+            {/* Challenge label */}
+            <div className="text-center">
+              <div
+                className="text-[10px] font-semibold text-foreground/70"
+                style={{ fontFamily: '"IBM Plex Mono", monospace' }}
+              >
+                {challenge.category.toUpperCase()}
+              </div>
             </div>
           </div>
         </div>
@@ -112,24 +128,36 @@ const HubNode = () => {
       />
 
       {/* Animated glow rings */}
-      <div className="absolute inset-0 w-full h-full bg-primary/10 rounded-full animate-pulse" />
+      <div 
+        className="absolute inset-0 w-full h-full rounded-full animate-pulse"
+        style={{ backgroundColor: "#9E7AFF20" }}
+      />
 
-      {/* Main hub with logo */}
-      <div className="relative bg-transparent backdrop-blur-sm rounded-full p-4 border-1 border-primary/50 w-full h-full flex items-center justify-center">
-        <img
-          src="/zain-icon.png"
-          alt="zain Logo"
-          className="w-12 h-12 object-contain"
-          onError={(e) => {
-            // Fallback if logo doesn't exist
-            e.currentTarget.style.display = "none";
-            const nextElement = e.currentTarget
-              .nextElementSibling as HTMLElement;
-            if (nextElement) {
-              nextElement.style.display = "block";
-            }
-          }}
-        />
+      {/* Gradient border container */}
+      <div
+        className="relative w-full h-full rounded-full p-[3px] transition-transform duration-300 hover:scale-105"
+        style={{
+          background: "linear-gradient(45deg, #9E7AFF, #FE8BBB, #262626)",
+          boxShadow: "0 4px 20px #9E7AFF40"
+        }}
+      >
+        {/* Main hub with logo */}
+        <div className="w-full h-full rounded-full bg-background/90 backdrop-blur-sm flex items-center justify-center p-4">
+          <img
+            src="/zain-icon.png"
+            alt="zain Logo"
+            className="w-12 h-12 object-contain"
+            onError={(e) => {
+              // Fallback if logo doesn't exist
+              e.currentTarget.style.display = "none";
+              const nextElement = e.currentTarget
+                .nextElementSibling as HTMLElement;
+              if (nextElement) {
+                nextElement.style.display = "block";
+              }
+            }}
+          />
+        </div>
       </div>
     </div>
   );
@@ -181,9 +209,9 @@ const createInitialEdges = (): Edge[] => {
     animated: true,
     style: {
       strokeDasharray: "8,4",
-      strokeWidth: 1,
-      stroke: "#14b8a6",
-      opacity: 0.8,
+      strokeWidth: 2,
+      stroke: "#9E7AFF",
+      opacity: 0.7,
     },
   }));
 };
@@ -240,14 +268,16 @@ export const ChallengesDashboard = () => {
     const interval = setInterval(() => {
       setEdges((eds) =>
         eds.map((edge) => {
+          const colors = ["#9E7AFF", "#FE8BBB", "#262626"];
+          const randomColor = colors[Math.floor(Math.random() * colors.length)];
           return {
             ...edge,
             style: {
               ...edge.style,
-              stroke: "#f8fafc",
-              opacity: Math.random() > 0.5 ? 0.9 : 0.6,
+              stroke: randomColor,
+              opacity: Math.random() > 0.5 ? 0.8 : 0.5,
               filter:
-                Math.random() > 0.7 ? `drop-shadow(0 0 8px #64748b)` : "none",
+                Math.random() > 0.7 ? `drop-shadow(0 0 8px ${randomColor})` : "none",
             },
           };
         })
