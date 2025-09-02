@@ -148,7 +148,7 @@ const createInitialNodes = (challengesData: Challenge[]): Node[] => {
     type: "hub",
     position: { x: 400, y: 300 },
     data: {},
-    draggable: false,
+    draggable: true,
   };
 
   const challengeNodes: Node[] = challengesData.map((challenge, index) => {
@@ -163,7 +163,7 @@ const createInitialNodes = (challengesData: Challenge[]): Node[] => {
       type: "challenge",
       position: { x: x - 75, y: y - 75 }, // Center the node
       data: { challenge },
-      draggable: false,
+      draggable: true,
     };
   });
 
