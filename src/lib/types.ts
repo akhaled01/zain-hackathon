@@ -4,10 +4,9 @@ export interface Challenge {
   shortDescription: string;
   description: string;
   category: string;
-  difficulty: string;
   icon: any;
   exampleIdeas: string[];
-  toolsAndTech: string[];
+  toolsAndTech: { [key: string]: string[] };
   deliverables: string[];
   dataNote: string;
   registeredTeams?: number;
