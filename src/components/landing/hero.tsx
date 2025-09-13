@@ -57,7 +57,7 @@ export const HeroSection = ({
                     size="lg"
                     variant="outline"
                     className="text-lg px-8 py-6 border-primary text-primary hover:bg-primary/10 mt-4"
-                    onClick={() => router.push("/challenges")}
+                    onClick={() => router.push("/dashboard/challs")}
                   >
                     View Challenges
                   </Button>
@@ -74,7 +74,7 @@ export const HeroSection = ({
                       size="lg"
                       variant="outline"
                       className="text-lg px-8 py-6 border-primary text-primary hover:bg-primary/10"
-                      onClick={() => router.push("/challenges")}
+                      onClick={() => router.push("/dashboard/challs")}
                     >
                       See Challenges
                     </Button>

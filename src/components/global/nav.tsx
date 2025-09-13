@@ -12,7 +12,7 @@ export const Navbar = () => {
 
   const navigationLinks = [
     { name: "Home", href: "/" },
-    { name: "Challenges", href: "/challenges" },
+    { name: "Challenges", href: "/dashboard/challs" },
   ];
 
   return (
@@ -51,7 +51,7 @@ export const Navbar = () => {
             {isSignedIn ? (
               <div className="flex items-center space-x-4">
                 <span className="text-sm text-muted-foreground">
-                  Welcome, {user?.firstName || user?.username}
+                  {user?.firstName || user?.username}
                 </span>
                 <UserButton
                   appearance={{
@@ -131,4 +131,4 @@ export const Navbar = () => {
       )}
     </nav>
   );
-}
+};
