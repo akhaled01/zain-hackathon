@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { ChallengesDashboard } from "@/components/challenges-dashboard";
+import { ChallengesDashboard } from "@/components/challenges/challenges-dashboard";
 
 const Page = () => <ChallengesDashboard />;
 

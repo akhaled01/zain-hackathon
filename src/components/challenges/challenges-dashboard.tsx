@@ -16,8 +16,8 @@ import {
 } from "@xyflow/react";
 import { challenges } from "@/lib/consts";
 import { Challenge } from "@/lib/types";
-import { ChallengeDetailsDialog } from "./challenges/challenge-details-dialog";
-import { ChallengesMobile } from "./challenges/challenges-mobile";
+import { ChallengeDetailsDialog } from "./challenge-details-dialog";
+import { ChallengesMobile } from "./challenges-mobile";
 import "@xyflow/react/dist/style.css";
 
 // Custom Challenge Node Component
@@ -27,10 +27,9 @@ const ChallengeNode = ({
   data: {
     challenge: Challenge;
     onChallengeClick: (challenge: Challenge) => void;
-    isUserTeamChallenge?: boolean;
   };
 }) => {
-  const { challenge, onChallengeClick, isUserTeamChallenge } = data;
+  const { challenge, onChallengeClick } = data;
   const IconComponent = challenge.icon;
 
   // Cycle through theme gradient borders based on challenge ID
