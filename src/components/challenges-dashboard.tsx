@@ -263,7 +263,6 @@ export const ChallengesDashboard = () => {
     );
   }, [handleChallengeClick, setNodes]);
 
-
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
