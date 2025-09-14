@@ -21,6 +21,13 @@ export default defineSchema({
     id: v.string(),
     teamId: v.id("teams"),
     challengeId: v.number(),
+    judgements: v.array(v.id("judgements")),
+    finalScore: v.number(), // will be summed from individual judgement scores
+  }),
+
+  judgements: defineTable({
+    id: v.string(),
+    submissionId: v.id("submissions"),
     score: v.number(),
   }),
 });
