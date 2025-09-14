@@ -4,7 +4,10 @@ import { Id } from "@convex/_generated/dataModel";
 import { toast } from "sonner";
 import { ConvexResponse } from "@convex/types";
 
-export const useConvexTeamFuncs = (teamId?: Id<"teams">) => {
+export const useConvexTeamFuncs = (
+  teamId?: Id<"teams">,
+  userId?: Id<"users">
+) => {
   const createTeamMutation = useMutation(api.teams.createTeam);
   const confirmTeamMutation = useMutation(api.teams.confirmTeam);
   const joinTeamMutation = useMutation(api.teams.joinTeam);
@@ -12,10 +15,18 @@ export const useConvexTeamFuncs = (teamId?: Id<"teams">) => {
   const removeMemberMutation = useMutation(api.teams.removeMember);
 
   const getTeam = useQuery(api.teams.getTeam, teamId ? { teamId } : "skip");
+  const getTeamByUser = useQuery(
+    api.teams.getTeamByUser,
+    userId ? { userId } : "skip"
+  );
 
-  const createTeam = async (args: { name: string; challengeId: number; creatorId: Id<"users"> }) => {
+  const createTeam = async (args: {
+    name: string;
+    challengeId: number;
+    creatorId: Id<"users">;
+  }) => {
     try {
-      const result = await createTeamMutation(args) as ConvexResponse;
+      const result = (await createTeamMutation(args)) as ConvexResponse;
       if (result.success) {
         toast.success("Team created successfully!");
         return result;
@@ -31,7 +42,7 @@ export const useConvexTeamFuncs = (teamId?: Id<"teams">) => {
 
   const confirmTeam = async (args: { teamId: Id<"teams"> }) => {
     try {
-      const result = await confirmTeamMutation(args) as ConvexResponse;
+      const result = (await confirmTeamMutation(args)) as ConvexResponse;
       if (result.success) {
         toast.success("Team confirmed successfully!");
         return result;
@@ -47,7 +58,7 @@ export const useConvexTeamFuncs = (teamId?: Id<"teams">) => {
 
   const joinTeam = async (args: { teamCode: string; userId: Id<"users"> }) => {
     try {
-      const result = await joinTeamMutation(args) as ConvexResponse;
+      const result = (await joinTeamMutation(args)) as ConvexResponse;
       if (result.success) {
         toast.success("Successfully joined team!");
         return result;
@@ -61,9 +72,12 @@ export const useConvexTeamFuncs = (teamId?: Id<"teams">) => {
     }
   };
 
-  const leaveTeam = async (args: { teamId: Id<"teams">; userId: Id<"users"> }) => {
+  const leaveTeam = async (args: {
+    teamId: Id<"teams">;
+    userId: Id<"users">;
+  }) => {
     try {
-      const result = await leaveTeamMutation(args) as ConvexResponse;
+      const result = (await leaveTeamMutation(args)) as ConvexResponse;
       if (result.success) {
         toast.success("Successfully left team!");
         return result;
@@ -77,9 +91,13 @@ export const useConvexTeamFuncs = (teamId?: Id<"teams">) => {
     }
   };
 
-  const removeMember = async (args: { teamId: Id<"teams">; userId: Id<"users">; creatorId: Id<"users"> }) => {
+  const removeMember = async (args: {
+    teamId: Id<"teams">;
+    userId: Id<"users">;
+    creatorId: Id<"users">;
+  }) => {
     try {
-      const result = await removeMemberMutation(args) as ConvexResponse;
+      const result = (await removeMemberMutation(args)) as ConvexResponse;
       if (result.success) {
         toast.success("Member removed successfully!");
         return result;
@@ -96,6 +114,7 @@ export const useConvexTeamFuncs = (teamId?: Id<"teams">) => {
   return {
     createTeam,
     getTeam,
+    getTeamByUser,
     confirmTeam,
     joinTeam,
     leaveTeam,
