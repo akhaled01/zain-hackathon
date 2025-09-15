@@ -15,6 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { CustomBadge } from "@/components/global/custom-badge";
+import { Users, Crown, Copy, Check, ExternalLink } from "lucide-react";
 import {
   InputOTP,
   InputOTPGroup,
@@ -38,6 +40,7 @@ export const TeamJoinSection = ({ challengeId }: { challengeId: number }) => {
   // State for team creation/joining
   const [activeTab, setActiveTab] = useState<"create" | "join">("create");
   const [isLoading, setIsLoading] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
 
   // Form setup with Zod validation
   const createForm = useForm<CreateTeamForm>({
@@ -90,6 +93,16 @@ export const TeamJoinSection = ({ challengeId }: { challengeId: number }) => {
     }
   };
 
+  const copyTeamCode = async () => {
+    if (userTeam?.teamCode) {
+      await navigator.clipboard.writeText(userTeam.teamCode);
+      setCopiedCode(true);
+      setTimeout(() => setCopiedCode(false), 2000);
+    }
+  };
+
+  const isCreator = convexUser?._id === userTeam?.creatorId;
+
   return (
     <div className="w-full max-w-2xl mx-auto">
       <Accordion type="single" collapsible className="w-full">
@@ -106,24 +119,104 @@ export const TeamJoinSection = ({ challengeId }: { challengeId: number }) => {
           </AccordionTrigger>
           <AccordionContent>
             {userTeam ? (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Your Team</CardTitle>
-                  <CardDescription>You are currently part of a team</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label>Team Name</Label>
-                    <p className="text-lg font-medium">{userTeam.name}</p>
-                  </div>
-                  <div>
-                    <Label>Team Code</Label>
-                    <p className="text-lg font-mono bg-muted px-3 py-2 rounded-md inline-block">
-                      {userTeam.teamCode}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+              <div className="space-y-6">
+                {/* Team Header Card */}
+                <Card className="border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
+                          <Users className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-2xl font-bold text-foreground">
+                            {userTeam.name}
+                          </CardTitle>
+                          <CardDescription className="text-base">
+                            {userTeam.members.length + 1} member{userTeam.members.length !== 0 ? 's' : ''}
+                          </CardDescription>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {isCreator && (
+                          <CustomBadge variant="info" className="flex items-center gap-1">
+                            <Crown className="w-3 h-3" />
+                            Creator
+                          </CustomBadge>
+                        )}
+                        <CustomBadge 
+                          variant={userTeam.confirmed ? "success" : "warning"}
+                          className="text-sm"
+                        >
+                          {userTeam.confirmed ? "Confirmed" : "Pending"}
+                        </CustomBadge>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  
+                  {!userTeam.confirmed && (
+                    <CardContent className="pt-0">
+                      <div className="bg-background/50 rounded-lg p-4 border">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                              Team Code
+                            </Label>
+                            <div className="flex items-center gap-2 mt-1">
+                              <code className="font-mono bg-muted/80 border px-3 py-2 rounded-md text-lg font-bold tracking-wider">
+                                {userTeam.teamCode}
+                              </code>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={copyTeamCode}
+                                className="h-9 w-9 p-0 hover:bg-muted/80"
+                                title="Copy team code"
+                              >
+                                {copiedCode ? (
+                                  <Check className="w-4 h-4 text-green-600" />
+                                ) : (
+                                  <Copy className="w-4 h-4 text-muted-foreground" />
+                                )}
+                              </Button>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm text-muted-foreground">
+                              Share this code with teammates
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Code expires when team is confirmed
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  )}
+                </Card>
+
+                {/* Team Actions Card */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <ExternalLink className="w-5 h-5" />
+                      Team Dashboard
+                    </CardTitle>
+                    <CardDescription>
+                      Manage your team, view members, and track progress
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button 
+                      className="w-full" 
+                      onClick={() => window.location.href = '/dashboard/team'}
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Go to Team Dashboard
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
             ) : (
               <div className="space-y-6">
                 <p className="text-muted-foreground">

@@ -122,9 +122,11 @@ export const TeamActions: FC<TeamActionsProps> = ({ team, isCreator }) => {
 
   return (
     <div>
-      <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wide mb-3">
-        Team Actions
-      </h4>
+      {!team.confirmed && (
+        <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wide mb-3">
+          Team Actions
+        </h4>
+      )}
       
       <div className="space-y-2">
         {!team.confirmed && (
@@ -135,11 +137,13 @@ export const TeamActions: FC<TeamActionsProps> = ({ team, isCreator }) => {
           />
         )}
         
-        <DeleteTeamDialog 
-          team={team} 
-          onDelete={handleDeleteTeam} 
-          isDeleting={isDeleting} 
-        />
+        {!team.confirmed && (
+          <DeleteTeamDialog 
+            team={team} 
+            onDelete={handleDeleteTeam} 
+            isDeleting={isDeleting} 
+          />
+        )}
       </div>
     </div>
   );

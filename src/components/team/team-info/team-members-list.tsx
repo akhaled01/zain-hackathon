@@ -16,6 +16,7 @@ import {
 import { Users, Crown, UserMinus } from "lucide-react";
 import { useConvexTeamFuncs } from "@/lib/hooks/convex/teams";
 import { useUser } from "@clerk/nextjs";
+import { useUserConvexFuncs } from "@/lib/hooks/convex/users";
 
 interface TeamMembersListProps {
   team: Team;
@@ -26,6 +27,7 @@ export const TeamMembersList: FC<TeamMembersListProps> = ({ team, currentUser })
   const [removingMember, setRemovingMember] = useState<string | null>(null);
   const { removeMember } = useConvexTeamFuncs();
   const { user: clerkUser } = useUser();
+  const { getUserById } = useUserConvexFuncs();
   
   const isCreator = currentUser?._id === team.creatorId;
 
@@ -63,11 +65,14 @@ export const TeamMembersList: FC<TeamMembersListProps> = ({ team, currentUser })
       };
     }
     
-    // For other members, we only have their IDs from the database
+    // For other members, try to fetch their data from Convex
+    const memberData = getUserById(memberId as any);
+    const userData = memberData?.success ? memberData.data : null;
+    
     return {
       id: memberId,
-      name: isCreatorMember ? "Team Creator" : "Team Member",
-      email: "Member", // We don't have email data for other users
+      name: userData?.name || (isCreatorMember ? "Team Creator" : "Team Member"),
+      email: userData?.email || "Member",
       isCreator: isCreatorMember
     };
   });
