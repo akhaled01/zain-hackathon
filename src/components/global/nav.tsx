@@ -19,11 +19,12 @@ export const Navbar = () => {
     : null;
 
   const { isUserInTeam } = useConvexTeamFuncs(undefined, convexUser?._id);
+  const userInTeam = isUserInTeam();
 
   const navigationLinks = [
     { name: "Home", href: "/", disabled: false },
     { name: "Challenges", href: "/dashboard/challs", disabled: false },
-    { name: "Team", href: "/dashboard/team", disabled: !isSignedIn || !isUserInTeam },
+    ...(isSignedIn && userInTeam ? [{ name: "Team", href: "/dashboard/team", disabled: false }] : []),
   ];
 
   return (
