@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { CountdownTimer } from "@/components/landing/countdown";
 import { useRouter } from "next/navigation";
 import { useTimer } from "@/lib/hooks/utils/timer";
+import { useUserConvexFuncs } from "@/lib/hooks/convex/users";
+import { useConvexTeamFuncs } from "@/lib/hooks/convex/teams";
 
 export const HeroSection = ({
   timeLeft,
@@ -10,6 +12,11 @@ export const HeroSection = ({
 }) => {
   const router = useRouter();
   const { isStarted } = useTimer();
+  const { getUserByClerkId } = useUserConvexFuncs();
+  const convexUserResponse = getUserByClerkId;
+  const convexUser = convexUserResponse?.success ? convexUserResponse.data : null;
+
+  const { isUserInTeam } = useConvexTeamFuncs(undefined, convexUser?._id);
 
   return (
     <section className="min-h-screen flex items-center justify-center px-6 lg:px-8 bg-transparent">
@@ -35,9 +42,6 @@ export const HeroSection = ({
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight bg-gradient-to-r from-primary via-secondary to-primary/80 bg-clip-text text-transparent animate-gradient-x mb-4">
                 Zain AI Hackathon
               </h1>
-              {/* <p className="text-lg md:text-xl text-muted-foreground mt-6 max-w-2xl">
-                Join the ultimate AI innovation challenge. Build, compete, and shape the future of technology.
-              </p> */}
             </div>
           </div>
 
@@ -53,14 +57,25 @@ export const HeroSection = ({
                   <p className="text-lg text-muted-foreground">
                     The competition is now live.
                   </p>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="text-lg px-8 py-6 border-primary text-primary hover:bg-primary/10 mt-4"
-                    onClick={() => router.push("/dashboard/challs")}
-                  >
-                    View Challenges
-                  </Button>
+                  {isUserInTeam() ? (
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="text-lg px-8 py-6 border-primary text-primary hover:bg-primary/10 mt-4"
+                      onClick={() => router.push("/dashboard/team")}
+                    >
+                      Go to your team
+                    </Button>
+                  ) : (
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="text-lg px-8 py-6 border-primary text-primary hover:bg-primary/10 mt-4"
+                      onClick={() => router.push("/dashboard/challs")}
+                    >
+                      View Challenges
+                    </Button>
+                  )}
                 </div>
               ) : (
                 <div className="bg-background/80 backdrop-blur-md rounded-2xl p-6 border border-border/50 shadow-2xl">

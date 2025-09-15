@@ -29,6 +29,7 @@ export interface NavigationProps {
 }
 
 export interface Team {
+  _id?: string;
   name: string;
   creatorId: string;
   confirmed: boolean;
