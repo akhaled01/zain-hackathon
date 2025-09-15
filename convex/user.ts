@@ -5,6 +5,9 @@ import { ConvexResponse, createSuccessResponse, createErrorResponse, ErrorCodes 
 export const createUser = mutation({
   args: { 
     clerkId: v.string(),
+    name: v.string(),
+    email: v.string(),
+    username: v.string(),
   },
   handler: async (ctx, args): Promise<ConvexResponse> => {
     try {
@@ -21,8 +24,11 @@ export const createUser = mutation({
       // Create new user
       const userId = await ctx.db.insert("users", {
         id: args.clerkId,
-        teamId: undefined as any, // Will be set when user joins/creates a team
+        teamId: undefined as any,
         verified: false,
+        name: args.name,
+        email: args.email,
+        username: args.username,
       });
 
       return createSuccessResponse({ userId, existing: false });
@@ -62,6 +68,22 @@ export const getUserByClerkId = query({
         .filter((q) => q.eq(q.field("id"), args.clerkId))
         .first();
         
+      if (!user) {
+        return createErrorResponse("User not found", ErrorCodes.NOT_FOUND);
+      }
+      
+      return createSuccessResponse(user);
+    } catch (error) {
+      return createErrorResponse("Failed to fetch user", ErrorCodes.INTERNAL_ERROR);
+    }
+  },
+});
+
+export const getUserById = query({
+  args: { userId: v.id("users") },
+  handler: async (ctx, args): Promise<ConvexResponse> => {
+    try {
+      const user = await ctx.db.get(args.userId);
       if (!user) {
         return createErrorResponse("User not found", ErrorCodes.NOT_FOUND);
       }

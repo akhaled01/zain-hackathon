@@ -5,6 +5,9 @@ export default defineSchema({
   users: defineTable({
     id: v.string(),
     teamId: v.optional(v.id("teams")),
+    name: v.string(),
+    email: v.string(),
+    username: v.string(),
     verified: v.boolean(),
   }),
 

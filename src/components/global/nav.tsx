@@ -14,14 +14,16 @@ export const Navbar = () => {
 
   const { getUserByClerkId } = useUserConvexFuncs();
   const convexUserResponse = getUserByClerkId;
-  const convexUser = convexUserResponse?.success ? convexUserResponse.data : null;
+  const convexUser = convexUserResponse?.success
+    ? convexUserResponse.data
+    : null;
 
   const { isUserInTeam } = useConvexTeamFuncs(undefined, convexUser?._id);
 
   const navigationLinks = [
-    { name: "Home", href: "/" },
-    { name: "Challenges", href: "/dashboard/challs" },
-    { name: "Team", href: "/dashboard/team", disabled: !isUserInTeam },
+    { name: "Home", href: "/", disabled: false },
+    { name: "Challenges", href: "/dashboard/challs", disabled: false },
+    { name: "Team", href: "/dashboard/team", disabled: !isSignedIn || !isUserInTeam },
   ];
 
   return (
@@ -43,15 +45,17 @@ export const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              {navigationLinks.filter((link) => !link.disabled).map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-                >
-                  {link.name}
-                </Link>
-              ))}
+              {navigationLinks.map((link) =>
+                !link.disabled ? (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                  >
+                    {link.name}
+                  </Link>
+                ) : null
+              )}
             </div>
           </div>
 

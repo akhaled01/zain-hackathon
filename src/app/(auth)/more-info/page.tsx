@@ -19,7 +19,12 @@ const Page = () => {
       setIsCreating(true);
 
       try {
-        await createUser({ clerkId: user.id });
+        await createUser({
+          clerkId: user.id,
+          name: user.firstName ?? "unknown",
+          email: user.primaryEmailAddress?.emailAddress ?? "unknown",
+          username: user.username ?? "unknown",
+        });
         router.push("/dashboard");
       } catch (error) {
         console.error("Failed to create user:", error);

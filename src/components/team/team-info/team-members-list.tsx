@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Users, Crown, UserMinus } from "lucide-react";
 import { useConvexTeamFuncs } from "@/lib/hooks/convex/teams";
+import { useUser } from "@clerk/nextjs";
 
 interface TeamMembersListProps {
   team: Team;
@@ -24,6 +25,7 @@ interface TeamMembersListProps {
 export const TeamMembersList: FC<TeamMembersListProps> = ({ team, currentUser }) => {
   const [removingMember, setRemovingMember] = useState<string | null>(null);
   const { removeMember } = useConvexTeamFuncs();
+  const { user: clerkUser } = useUser();
   
   const isCreator = currentUser?._id === team.creatorId;
 
@@ -44,25 +46,40 @@ export const TeamMembersList: FC<TeamMembersListProps> = ({ team, currentUser })
     }
   };
 
-  // Mock member data - replace with actual member data from your backend
-  const mockMembers = [
-    { id: team.creatorId, name: "Team Creator", email: "creator@example.com", isCreator: true },
-    ...team.members.slice(0, 3).map((memberId, index) => ({
+  // Create actual member list from team data
+  const allMemberIds = [team.creatorId, ...team.members];
+  const uniqueMemberIds = [...new Set(allMemberIds)]; // Remove duplicates if creator is also in members array
+  
+  const teamMembers = uniqueMemberIds.map((memberId) => {
+    const isCreatorMember = memberId === team.creatorId;
+    
+    // For the current user, use Clerk data if available
+    if (currentUser?.id === memberId && clerkUser) {
+      return {
+        id: memberId,
+        name: clerkUser.fullName || clerkUser.firstName || "You",
+        email: clerkUser.primaryEmailAddress?.emailAddress || "No email",
+        isCreator: isCreatorMember
+      };
+    }
+    
+    // For other members, we only have their IDs from the database
+    return {
       id: memberId,
-      name: `Member ${index + 1}`,
-      email: `member${index + 1}@example.com`,
-      isCreator: false
-    }))
-  ];
+      name: isCreatorMember ? "Team Creator" : "Team Member",
+      email: "Member", // We don't have email data for other users
+      isCreator: isCreatorMember
+    };
+  });
 
   return (
     <div>
       <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wide mb-3">
-        Team Members ({mockMembers.length})
+        Team Members ({teamMembers.length})
       </h4>
       
       <div className="space-y-2">
-        {mockMembers.map((member) => (
+        {teamMembers.map((member) => (
           <div
             key={member.id}
             className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors"

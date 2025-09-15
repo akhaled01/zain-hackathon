@@ -15,7 +15,7 @@ export const useUserConvexFuncs = () => {
     user?.id ? { clerkId: user.id } : "skip"
   );
 
-  const createUser = async (args: { clerkId: string }) => {
+  const createUser = async (args: { clerkId: string, name: string, email: string, username: string }) => {
     try {
       const result = await createUserMutation(args) as ConvexResponse;
       if (result.success) {
@@ -51,5 +51,11 @@ export const useUserConvexFuncs = () => {
     }
   };
 
-  return { createUser, verifyUser, getUserByClerkId };
+  const getUserById = (userId: Id<"users"> | undefined) => 
+    useQuery(
+      api.user.getUserById,
+      userId ? { userId } : "skip"
+    );
+
+  return { createUser, verifyUser, getUserByClerkId, getUserById };
 };
