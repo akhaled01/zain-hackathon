@@ -92,7 +92,7 @@ export const TeamMembersList: FC<TeamMembersListProps> = ({ team, currentUser })
                     <Button
                       variant="outline"
                       size="sm"
-                      className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                      className="h-8 w-8 p-0 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
                       disabled={removingMember === member.id}
                     >
                       <UserMinus className="w-4 h-4" />

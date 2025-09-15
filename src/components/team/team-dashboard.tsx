@@ -1,7 +1,7 @@
 import { Team } from "@/lib/types";
 import { FC } from "react";
 import { TeamHeader } from "./team-header";
-import { TeamInfo } from "./team-info";
+import { TeamInfo } from "./team-info/team-info";
 import { QuickCommands } from "./quick-commands";
 import { DataReservoir } from "./data-reservoir";
 
