@@ -5,14 +5,23 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useConvexTeamFuncs } from "@/lib/hooks/convex/teams";
+import { useUserConvexFuncs } from "@/lib/hooks/convex/users";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isSignedIn, user } = useUser();
 
+  const { getUserByClerkId } = useUserConvexFuncs();
+  const convexUserResponse = getUserByClerkId;
+  const convexUser = convexUserResponse?.success ? convexUserResponse.data : null;
+
+  const { isUserInTeam } = useConvexTeamFuncs(undefined, convexUser?._id);
+
   const navigationLinks = [
     { name: "Home", href: "/" },
     { name: "Challenges", href: "/dashboard/challs" },
+    { name: "Team", href: "/dashboard/team", disabled: !isUserInTeam },
   ];
 
   return (
@@ -34,7 +43,7 @@ export const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              {navigationLinks.map((link) => (
+              {navigationLinks.filter((link) => !link.disabled).map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}

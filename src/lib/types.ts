@@ -27,3 +27,12 @@ export interface ScheduleDay {
 export interface NavigationProps {
   scrollToSection: (sectionId: string) => void;
 }
+
+export interface Team {
+  name: string;
+  creatorId: string;
+  confirmed: boolean;
+  teamCode: string;
+  challengeId: number;
+  members: string[];
+}
