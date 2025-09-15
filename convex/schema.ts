@@ -30,6 +30,7 @@ export default defineSchema({
 
   judgements: defineTable({
     id: v.string(),
+    judgeName: v.string(),
     submissionId: v.id("submissions"),
     score: v.number(),
   }),

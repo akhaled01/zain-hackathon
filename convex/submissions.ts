@@ -105,3 +105,26 @@ export const getSubmissionsForJudge = query({
     }
   },
 });
+
+
+export const aggregateFinalScore = mutation({
+  args: {
+    submissionId: v.id("submissions"),
+  },
+  handler: async (ctx, args): Promise<ConvexResponse> => {
+    try {
+      const submission = await ctx.db.get(args.submissionId);
+      if (!submission) {
+        return createErrorResponse("Submission not found", ErrorCodes.NOT_FOUND);
+      }
+      
+      const judgements = await ctx.db.query("judgements").filter((q) => q.eq(q.field("submissionId"), args.submissionId)).collect();
+      const finalScore = judgements.reduce((acc, judgement) => acc + judgement.score, 0);
+      
+      await ctx.db.patch(args.submissionId, { finalScore });
+      return createSuccessResponse({ message: "Final score aggregated successfully" });
+    } catch (error) {
+      return createErrorResponse("Failed to aggregate final score", ErrorCodes.INTERNAL_ERROR);
+    }
+  },
+})
