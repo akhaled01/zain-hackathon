@@ -2,7 +2,7 @@ import { Team } from "@/lib/types";
 import { FC } from "react";
 import { TeamHeader } from "./team-header";
 import { TeamInfo } from "./team-info/team-info";
-import { QuickCommands } from "./quick-commands";
+import { SubmissionSection } from "./submit-project";
 import { DataReservoir } from "./data-reservoir";
 
 export const TeamDashboard: FC<{ team: Team }> = ({ team }) => (
@@ -14,7 +14,7 @@ export const TeamDashboard: FC<{ team: Team }> = ({ team }) => (
       </div>
       <div className="lg:col-span-2 space-y-6">
         <TeamInfo team={team} />
-        <QuickCommands />
+        <SubmissionSection team={team} challengeId={team.challengeId} />
       </div>
     </div>
   </div>

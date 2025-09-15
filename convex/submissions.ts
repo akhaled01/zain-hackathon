@@ -79,3 +79,29 @@ export const updateSubmission = mutation({
     }
   },
 });
+
+export const getSubmissionsForJudge = query({
+  args: {
+    challengeId: v.optional(v.number()),
+  },
+  handler: async (ctx, args): Promise<ConvexResponse> => {
+    try {
+      let submissions;
+      
+      if (args.challengeId !== undefined) {
+        // Filter by specific challenge ID
+        submissions = await ctx.db
+          .query("submissions")
+          .filter((q) => q.eq(q.field("challengeId"), args.challengeId))
+          .collect();
+      } else {
+        // Get all submissions (for static judges)
+        submissions = await ctx.db.query("submissions").collect();
+      }
+      
+      return createSuccessResponse(submissions);
+    } catch (error) {
+      return createErrorResponse("Failed to fetch submissions", ErrorCodes.INTERNAL_ERROR);
+    }
+  },
+});
