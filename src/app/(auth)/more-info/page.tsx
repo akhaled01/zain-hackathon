@@ -8,13 +8,25 @@ import { Loader } from "@/components/global/loader";
 
 const Page = () => {
   const { user, isLoaded } = useUser();
-  const { createUser } = useUserConvexFuncs();
+  const { createUser, getUserByClerkId } = useUserConvexFuncs();
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
 
+  const convexUserResponse = getUserByClerkId;
+  const existingUser = convexUserResponse?.success ? convexUserResponse.data : null;
+
   useEffect(() => {
+    if (!isLoaded || !user) return;
+
+    // If user already exists in database, redirect to dashboard
+    if (existingUser) {
+      router.push("/dashboard");
+      return;
+    }
+
+    // If user doesn't exist and we're not already creating, create the user
     const handleUserCreation = async () => {
-      if (!isLoaded || !user || isCreating) return;
+      if (isCreating) return;
 
       setIsCreating(true);
 
@@ -34,7 +46,7 @@ const Page = () => {
     };
 
     handleUserCreation();
-  }, [isLoaded, user, createUser, router, isCreating]);
+  }, [isLoaded, user, existingUser, createUser, router, isCreating]);
 
   if (!isLoaded || isCreating) {
     return (

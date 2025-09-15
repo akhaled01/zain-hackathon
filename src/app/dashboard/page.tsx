@@ -11,23 +11,30 @@ const Page = () => {
   const { getUserByClerkId } = useUserConvexFuncs();
   const router = useRouter();
 
+  const convexUserResponse = getUserByClerkId;
+  const convexUser = convexUserResponse?.success
+    ? convexUserResponse.data
+    : null;
+
+  console.log(convexUser);
+
   useEffect(() => {
     if (!isLoaded || !user) return;
 
-    if (getUserByClerkId === null) {
+    if (convexUser === null) {
       router.push("/more-info");
     }
 
-    if (!getUserByClerkId?.teamId) {
+    if (!convexUser?.teamId) {
       router.push("/dashboard/challs");
     }
 
-    if (getUserByClerkId?.teamId) {
+    if (convexUser?.teamId) {
       router.push("/dashboard/team");
     }
-  }, [isLoaded, user, getUserByClerkId, router]);
+  }, [isLoaded, user, convexUser, router]);
 
-  if (!isLoaded || !user || getUserByClerkId === undefined) {
+  if (!isLoaded || !user || convexUser === undefined) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-background">
         <Loader />

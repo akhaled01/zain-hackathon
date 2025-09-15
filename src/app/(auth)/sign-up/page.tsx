@@ -8,6 +8,7 @@ const Page = () => (
       appearance={{
         theme: shadcn,
       }}
+      fallbackRedirectUrl="/more-info"
     />
   </div>
 );
