@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Challenge } from "@/lib/types";
 import { TechStackBadge } from "./tech-stack-badge";
+import { TeamJoinSection } from "./team-join-section";
 
 interface ChallengeDetailsDialogProps {
   selectedChallenge: Challenge | null;
@@ -45,6 +46,7 @@ export const ChallengeDetailsDialog = ({
           </DialogHeader>
 
           <div className="space-y-8 mt-8">
+            <TeamJoinSection challengeId={selectedChallenge.id}/>
             {/* Challenge Description */}
             <div>
               <h4 className="text-base sm:text-lg font-semibold mb-4 text-foreground">

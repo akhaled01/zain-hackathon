@@ -3,6 +3,7 @@ import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
 import { toast } from "sonner";
 import { ConvexResponse } from "@convex/types";
+import { useRouter } from "next/navigation";
 
 export const useConvexTeamFuncs = (
   teamId?: Id<"teams">,
@@ -20,6 +21,8 @@ export const useConvexTeamFuncs = (
     userId ? { userId } : "skip"
   );
 
+  const router = useRouter();
+
   const createTeam = async (args: {
     name: string;
     challengeId: number;
@@ -29,6 +32,7 @@ export const useConvexTeamFuncs = (
       const result = (await createTeamMutation(args)) as ConvexResponse;
       if (result.success) {
         toast.success("Team created successfully!");
+        router.replace("/dashboard/team");
         return result;
       } else {
         toast.error(result.error);
@@ -61,6 +65,7 @@ export const useConvexTeamFuncs = (
       const result = (await joinTeamMutation(args)) as ConvexResponse;
       if (result.success) {
         toast.success("Successfully joined team!");
+        router.replace("/dashboard/team");
         return result;
       } else {
         toast.error(result.error);
@@ -80,6 +85,7 @@ export const useConvexTeamFuncs = (
       const result = (await leaveTeamMutation(args)) as ConvexResponse;
       if (result.success) {
         toast.success("Successfully left team!");
+        router.replace("/dashboard/challs");
         return result;
       } else {
         toast.error(result.error);
@@ -111,6 +117,11 @@ export const useConvexTeamFuncs = (
     }
   };
 
+  const isUserInTeam = () => {
+    const userTeamResponse = getTeamByUser;
+    return userTeamResponse?.success && userTeamResponse.data !== null;
+  }
+
   return {
     createTeam,
     getTeam,
@@ -119,5 +130,6 @@ export const useConvexTeamFuncs = (
     joinTeam,
     leaveTeam,
     removeMember,
+    isUserInTeam,
   };
 };
