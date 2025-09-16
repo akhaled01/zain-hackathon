@@ -20,6 +20,7 @@ This repository is for the Zain Hackathon, an internal hackathon organized by Za
 
 ## Current TODO
 
-1. Handle submission through google drive
+1. Handle submission mgmt through google drive
 2. add judging comments
 3. establish admin functionalities
+4. fix up data reservoir
