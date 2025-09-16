@@ -1,9 +1,5 @@
-const Page = () => {
-    return (
-        <div>
-            <h1>Judge</h1>
-        </div>
-    );
-}
+import { JudgeDashboard } from "@/components/judge/judge-dashboard";
+
+const Page = () => <JudgeDashboard />;
 
 export default Page;

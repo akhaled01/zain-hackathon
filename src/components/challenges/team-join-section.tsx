@@ -70,9 +70,14 @@ export const TeamJoinSection = ({ challengeId }: { challengeId: number }) => {
   const userTeam = userTeamResponse?.success ? userTeamResponse.data : null;
 
   const handleCreateTeam = async (data: CreateTeamForm) => {
+    if (!convexUser?._id) {
+      console.error("User not loaded yet");
+      return;
+    }
+
     setIsLoading(true);
     try {
-      await createTeam({ name: data.teamName, challengeId: challengeId, creatorId: convexUser?._id });
+      await createTeam({ name: data.teamName, challengeId: challengeId, creatorId: convexUser._id });
       createForm.reset();
     } catch (error) {
       console.error("Error creating team:", error);
@@ -82,9 +87,14 @@ export const TeamJoinSection = ({ challengeId }: { challengeId: number }) => {
   };
 
   const handleJoinTeam = async (data: JoinTeamForm) => {
+    if (!convexUser?._id) {
+      console.error("User not loaded yet");
+      return;
+    }
+
     setIsLoading(true);
     try {
-      await joinTeam({ teamCode: data.teamCode, userId: convexUser?._id });
+      await joinTeam({ teamCode: data.teamCode, userId: convexUser._id });
       joinForm.reset();
     } catch (error) {
       console.error("Error joining team:", error);
@@ -233,13 +243,15 @@ export const TeamJoinSection = ({ challengeId }: { challengeId: number }) => {
                   >
                     Create Team
                   </Button>
-                  <Button
-                    variant={activeTab === "join" ? "default" : "ghost"}
-                    className="flex-1"
-                    onClick={() => setActiveTab("join")}
-                  >
-                    Join Team
-                  </Button>
+                  {!convexUser?.teamId && (
+                    <Button
+                      variant={activeTab === "join" ? "default" : "ghost"}
+                      className="flex-1"
+                      onClick={() => setActiveTab("join")}
+                    >
+                      Join Team
+                    </Button>
+                  )}
                 </div>
 
                 {/* Create Team Tab */}
@@ -278,7 +290,7 @@ export const TeamJoinSection = ({ challengeId }: { challengeId: number }) => {
                 )}
 
                 {/* Join Team Tab */}
-                {activeTab === "join" && (
+                {activeTab === "join" && !convexUser?.teamId && (
                   <Card>
                     <CardHeader>
                       <CardTitle>Join Existing Team</CardTitle>

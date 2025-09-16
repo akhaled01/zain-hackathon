@@ -5,7 +5,7 @@ const isJudgeRoute = createRouteMatcher(["/judge(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId, sessionClaims } = await auth();
-  
+
   // If user is authenticated and has judge role, redirect to /judge
   if (userId && sessionClaims?.metadata?.role === "judge") {
     // If they're not already on a judge route, redirect them

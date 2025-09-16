@@ -29,11 +29,32 @@ export interface NavigationProps {
 }
 
 export interface Team {
-  _id?: string;
+  _id: string;
   name: string;
   creatorId: string;
   confirmed: boolean;
   teamCode: string;
   challengeId: number;
   members: string[];
+}
+
+export interface Submission {
+  _id: string;
+  id: string;
+  teamId: string;
+  challengeId: number;
+  judgements: string[];
+  finalScore: number;
+  _creationTime: number;
+}
+
+export interface SubmissionWithTeam extends Submission {
+  team?: Team;
+  challengeName?: string;
+  judgeCount?: number;
+  status?: "pending" | "in-progress" | "completed";
+}
+
+export interface CriteriaScores {
+  [criteriaId: number]: number;
 }

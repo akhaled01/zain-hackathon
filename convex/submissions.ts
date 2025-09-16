@@ -99,7 +99,18 @@ export const getSubmissionsForJudge = query({
         submissions = await ctx.db.query("submissions").collect();
       }
       
-      return createSuccessResponse(submissions);
+      // Populate team data for each submission
+      const submissionsWithTeams = await Promise.all(
+        submissions.map(async (submission) => {
+          const team = await ctx.db.get(submission.teamId);
+          return {
+            ...submission,
+            team,
+          };
+        })
+      );
+      
+      return createSuccessResponse(submissionsWithTeams);
     } catch (error) {
       return createErrorResponse("Failed to fetch submissions", ErrorCodes.INTERNAL_ERROR);
     }
